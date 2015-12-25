@@ -1,17 +1,39 @@
 """
-Vertices on integer coordinates?  Count the number of lattice points inside?
-Sounds like Pick's theorem.
-We get area in terms of number of points on the boundary and number of points inside.
-We find area via determinant.
-We find number of points on the boundary by examining each segment.
+Given a polygon with points on an integer lattice, determine:
+	(1) The area,
+	(2) The number of lattice points on the boundary,
+	(3) The number of lattice points wholely inside the polygon.
 
-NOTE: Pick's theorem and boundary-determination extend easily enough
-to n-gons.  Area of an n-gon can be determine by apply the same
-determinant method to a series of triangular cuts from the same root vertex.
-So we do not actually the the plot of land to be triangular.
-Any contiguous polygon should do.
+We determine area as a sum of ordered areas of triangle slices.
+Each triangle's area can be determined straightforwardly by determinant,
+since its coordinates are known.
+
+The number of points on a line segment with integer endpoints
+is a straightforward consequence of gcd.
+
+Given the area of a polygon with vertices on a 2D integer lattice,
+plus the number of boundary points the polygon shares with that lattice,
+we can use Pick's Theorem to derive the polygon's number of
+internal lattice points.
+
+Pick's Theorem: AREA = (#BOUNDARY) / 2 + #INSIDE + 1
+
+So we write a function 'pick' which takes the vertices of a polygon and,
+if those vertices lie on an integer lattice (and there are at least
+three vertices), returns the area, the number of boundary lattice points,
+and the number of fully internal points.
+
+Note that order matters for the vertices, since a different ordering
+of the same vertices could indicate a different polygon.
+Also, although the polygon may be concave, it is assumed not to cross itself.
+
+Performs v gcd operations on pairs of vertices, which should be the
+limiting factor for speed.  GCD takes a linear number of % steps in the
+length of its inputs, so (counting each vertex) we perform a number of 
+% operations that is at most linear in the length of the input.
+
+Inspired by a "count the number of lattice points inside" problem.
 """
-
 
 def gcd(a,b):
     if a: return gcd(b%a, a)
@@ -52,14 +74,13 @@ def pick(vertices):
 	num_inside = int(area - (num_boundary / 2.0) + 1)
 	return (area, num_boundary, num_inside)
 
-def answer(vertices):
+def numInside(vertices):
     area = polygonArea(vertices)
     num_boundary = boundary(vertices)
-    num_inside = area - num_boundary / 2.0 + 1
-    return int(num_inside)
+    return int(area - num_boundary / 2.0 + 1)
 
 assert pick([(0,0),(0,1),(1,0)]) == (.5, 3, 0)
 assert pick([(0,0),(4,0),(4,3),(0,3)]) == (12, 14, 6)
 
-assert answer([[2,3], [6,9], [10,160]]) == 289
-assert answer([[91207, 89566], [-88690, -83026], [67100, 47194]]) == 1730960165
+assert numInside([[2,3], [6,9], [10,160]]) == 289
+assert numInside([[91207, 89566], [-88690, -83026], [67100, 47194]]) == 1730960165
