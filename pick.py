@@ -59,6 +59,7 @@ def answer(vertices):
     return int(num_inside)
 
 assert pick([(0,0),(0,1),(1,0)]) == (.5, 3, 0)
+assert pick([(0,0),(4,0),(4,3),(0,3)]) == (12, 14, 6)
 
 assert answer([[2,3], [6,9], [10,160]]) == 289
 assert answer([[91207, 89566], [-88690, -83026], [67100, 47194]]) == 1730960165
