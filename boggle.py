@@ -7,16 +7,15 @@ import random;
 import urllib.request;
 
 #def randomLetter():
-#    return randomFrom(ascii_lowercase);
+#    return random.choice(ascii_lowercase);
+
 scrabble_letters = ('a'*9 + 'b'*2 + 'c'*2 + 'd'*4 + 'e'*12 + 'f'*2 +
                     'g'*3 + 'h'*2 + 'i'*9 + 'j'*1 + 'k'*1  + 'l'*4 +
                     'm'*2 + 'n'*6 + 'o'*8 + 'p'*2 + 'q'*1  + 'r'*6 +
                     's'*4 + 't'*6 + 'u'*4 + 'v'*2 + 'w'*2  + 'x'*1 +
                     'y'*2 + 'z'*1);
 def randomScrabbleFrequencyLetter(): #For building random Boggle boards.
-    return randomFrom(scrabble_letters);
-def randomFrom(L):
-    return L[random.randrange(0,len(L))];
+    return random.choice(scrabble_letters);
 
 class Boggle():
     "A Boggle set which treats q and u as separate letters."
@@ -66,12 +65,10 @@ class Boggle():
                      
     def search(self, node, tile, frontier):
         "Generates all word endings from a given state."
-        if node.ends_word:  yield ""
+        if node.ends_word: yield ""
         for other in self.adj(tile):
             letter = self.board[other[0]][other[1]];
-            #print(tile, other, letter);
             if letter in node and other not in frontier:
-                #print("   ", letter);
                 frontier.add(other);
                 for ending in self.search(node[letter], other, frontier):
                     yield letter + ending;
@@ -80,7 +77,7 @@ class Boggle():
                 
                 
 class Dictionary(dict): 
-    "A case-sensitive dict-based trie.  Case-sensitive."
+    "A case-sensitive dict-based trie."
     def __init__(self, source = None, type = None):
         self.ends_word = False;
         if source: #Load the dictionary from the source.
