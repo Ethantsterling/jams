@@ -88,6 +88,10 @@ to be the next 'start'.
 So, we'll really need a double-ended queue.
 But we can wrap it to only expose the parts we want.
 
+This allows us to calculate the max k-or-shorter
+subsequence for each endpoint in amortized O(1)
+arithmetic operations.  Consequently, our full
+solution takes a linear amount of arithmetic.
 """
 from collections import deque
 
@@ -124,7 +128,6 @@ def maxSubsequence(seq, window_size=None):
 	for end in range(len(seq)):
 		minima.enqueue((sum_through_end, end))
 		sum_through_end += seq[end]
-
 
 		next_min_sum, next_min_index = minima.peek()
 		if end - start >= window_size or sum_to_start > next_min_sum:
